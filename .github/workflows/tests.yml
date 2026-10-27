@@ -1,4 +1,4 @@
-```yaml
+
 name: AfyaSync Tests
 
 on:
@@ -28,4 +28,4 @@ jobs:
 
       - name: Run tests
         run: pytest -v
-```
+
