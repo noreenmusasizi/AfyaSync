@@ -8,7 +8,7 @@ app = FastAPI(
 
 
 @app.get("/")
-def home():
+def home() -> dict[str, str]:
     return {
         "project": "AfyaSync",
         "status": "running",
@@ -17,7 +17,7 @@ def home():
 
 
 @app.get("/health")
-def health_check():
+def health_check() -> dict[str, str]:
     return {
         "status": "healthy",
     }
