@@ -1,4 +1,3 @@
-
 name: AfyaSync Tests
 
 on:
@@ -26,14 +25,14 @@ jobs:
           pip install -r requirements.txt
           pip install pytest httpx ruff mypy
 
-      -name: check code quality
-       run: ruff check .
+      - name: Check code quality
+        run: ruff check .
 
-      -name: check code formattng
-       run: ruff format --check .
-      -name: check types
-       run: mypy app tests
+      - name: Check code formatting
+        run: ruff format --check .
+
+      - name: Check types
+        run: mypy app tests
 
       - name: Run tests
-        run: pytest -v       
-
+        run: pytest -v
