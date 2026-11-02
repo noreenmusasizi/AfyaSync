@@ -1,8 +1,9 @@
-
 services:
   afyasync:
     build: .
     container_name: afyasync-api
     ports:
       - "8000:8000"
+    volumes:
+      - ./afyasync.db:/app/afyasync.db
     restart: unless-stopped

@@ -1,4 +1,5 @@
 from collections.abc import Generator
+from datetime import datetime
 
 from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseModel, ConfigDict
@@ -33,8 +34,12 @@ class ClinicRecordCreate(BaseModel):
 
 class ClinicRecordResponse(ClinicRecordCreate):
     id: int
+    sync_status: str
+    created_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
 
 
 @app.get("/")
@@ -81,3 +86,39 @@ def create_record(
 @app.get("/records", response_model=list[ClinicRecordResponse])
 def get_records(db: Session = Depends(get_db)) -> list[ClinicRecord]:
     return db.query(ClinicRecord).order_by(ClinicRecord.id).all()
+
+@app.get("/records/pending", response_model=list[ClinicRecordResponse])
+def get_pending_records(db: Session = Depends(get_db)) -> list[ClinicRecord]:
+    return (
+        db.query(ClinicRecord)
+        .filter(ClinicRecord.sync_status == "pending")
+        .order_by(ClinicRecord.id)
+        .all()
+    )
+
+@app.patch("/records/{record_id}/sync", response_model=ClinicRecordResponse)
+def mark_record_as_synced(
+    record_id: int,
+    db: Session = Depends(get_db),
+) -> ClinicRecord:
+    record = db.query(ClinicRecord).filter(
+        ClinicRecord.id == record_id
+    ).first()
+
+    if record is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Clinic record not found.",
+        )
+
+    if record.sync_status == "synced":
+        raise HTTPException(
+            status_code=409,
+            detail="This record is already synchronised.",
+        )
+
+    record.sync_status = "synced"
+    db.commit()
+    db.refresh(record)
+
+    return record
