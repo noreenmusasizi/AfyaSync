@@ -3,6 +3,7 @@ from collections.abc import Generator
 from datetime import datetime
 
 from fastapi import Depends, FastAPI, HTTPException
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
 
@@ -28,6 +29,9 @@ app = FastAPI(
     description="An offline-first healthcare infrastructure prototype.",
     version="0.1.0",
 )
+
+# Configure Prometheus metrics
+Instrumentator().instrument(app).expose(app)
 
 
 # Database dependency
