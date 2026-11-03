@@ -25,8 +25,11 @@ Base.metadata.create_all(bind=engine)
 
 # Initialize FastAPI
 app = FastAPI(
-    title="AfyaSync API",
-    description="An offline-first healthcare infrastructure prototype.",
+    title="Care Beyond Connectivity API",
+    description=(
+        "An offline-first digital healthcare infrastructure platform. "
+        "Reliable healthcare, with or without internet."
+    ),
     version="0.1.0",
 )
 
