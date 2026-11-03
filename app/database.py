@@ -8,11 +8,7 @@ DATABASE_URL = os.getenv(
     "sqlite:///./afyasync.db",
 )
 
-connect_args = (
-    {"check_same_thread": False}
-    if DATABASE_URL.startswith("sqlite")
-    else {}
-)
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(
     DATABASE_URL,

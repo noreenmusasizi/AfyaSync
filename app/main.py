@@ -135,11 +135,7 @@ def mark_record_as_synced(
     db: Session = Depends(get_db),
 ) -> ClinicRecord:
 
-    record = (
-        db.query(ClinicRecord)
-        .filter(ClinicRecord.id == record_id)
-        .first()
-    )
+    record = db.query(ClinicRecord).filter(ClinicRecord.id == record_id).first()
 
     if record is None:
         raise HTTPException(

@@ -15,7 +15,7 @@ class ClinicRecord(Base):
     record_type = Column(String, nullable=False)
     notes = Column(String, nullable=True)
 
-    sync_status: Mapped[str] =mapped_column(
+    sync_status: Mapped[str] = mapped_column(
         String,
         default="pending",
         nullable=False,

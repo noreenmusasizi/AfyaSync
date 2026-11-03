@@ -1,4 +1,3 @@
-
 from collections.abc import Generator
 
 import pytest
@@ -81,6 +80,7 @@ def test_get_records(client: TestClient) -> None:
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
+
 def test_get_pending_records(client: TestClient) -> None:
     client.post(
         "/records",
@@ -99,6 +99,7 @@ def test_get_pending_records(client: TestClient) -> None:
     assert response.json()[0]["patient_reference"] == "PENDING-001"
     assert response.json()[0]["sync_status"] == "pending"
 
+
 def test_mark_record_as_synced(client: TestClient) -> None:
     create_response = client.post(
         "/records",
@@ -116,6 +117,7 @@ def test_mark_record_as_synced(client: TestClient) -> None:
 
     assert response.status_code == 200
     assert response.json()["sync_status"] == "synced"
+
 
 def test_mark_already_synced_record_returns_conflict(
     client: TestClient,
@@ -136,6 +138,7 @@ def test_mark_already_synced_record_returns_conflict(
     response = client.patch(f"/records/{record_id}/sync")
 
     assert response.status_code == 409
+
 
 def test_mark_nonexistent_record_returns_404(
     client: TestClient,
