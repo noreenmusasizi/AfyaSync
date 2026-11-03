@@ -1,6 +1,8 @@
-# AfyaSync
+# Care Beyond Connectivity (CBC)
 
-### An Offline-First Healthcare Infrastructure Platform
+### An Offline-First Digital Healthcare Infrastructure Platform
+
+**Reliable Healthcare, With or Without Internet.**
 
 ![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-green)
@@ -10,15 +12,15 @@
 
 ## Overview
 
-AfyaSync is an offline-first healthcare infrastructure prototype designed to explore how healthcare information systems can remain reliable when internet connectivity is limited.
+Care Beyond Connectivity (CBC) is an offline-first digital healthcare infrastructure prototype designed to explore how healthcare information systems can remain reliable when internet connectivity is limited or unavailable.
 
-It demonstrates backend development, containerization, automated testing, continuous integration, continuous delivery, and application monitoring.
+The project demonstrates backend development, containerization, automated testing, continuous integration, continuous delivery, and application monitoring.
 
 ## Problem Statement
 
-Healthcare facilities with unreliable internet connectivity may struggle to exchange information reliably.
+Healthcare facilities with unreliable internet connectivity may struggle to access, manage, and exchange healthcare information reliably.
 
-AfyaSync explores how locally stored healthcare records can be managed and synchronized when connectivity becomes available.
+Care Beyond Connectivity explores how healthcare records can be stored locally and synchronized when internet connectivity becomes available.
 
 ## Project Objectives
 
@@ -76,10 +78,13 @@ Interactive API documentation:
 ## DevOps Implementation
 
 ### 1. Containerization
-Docker packages AfyaSync into a container for consistent application execution.
+
+Docker packages the application into a container for consistent execution across environments.
 
 ### 2. Continuous Integration
+
 GitHub Actions automatically performs:
+
 - Dependency installation.
 - Ruff code-quality checks.
 - Formatting checks.
@@ -88,12 +93,14 @@ GitHub Actions automatically performs:
 - Docker image builds.
 
 ### 3. Continuous Delivery
+
 Successful pushes to the main branch trigger Docker image publishing to GitHub Container Registry.
 
 ### 4. Monitoring and Observability
+
 Prometheus collects application metrics exposed by FastAPI.
 
-Grafana provides dashboards for visualizing monitoring data.
+Grafana is intended to provide dashboards for visualizing monitoring data.
 
 ## Running the Project
 
@@ -112,19 +119,15 @@ docker compose up --build
 
 Open the API documentation:
 
-```text
-http://localhost:8000/docs
-```
+`http://localhost:8000/docs`
 
 Check application health:
 
-```text
-http://localhost:8000/health
-```
+`http://localhost:8000/health`
 
 ## Docker Image
 
-AfyaSync images are published to GitHub Container Registry:
+The current Docker image is published to GitHub Container Registry:
 
 ```text
 ghcr.io/noreenmusasizi/afyasync:latest
@@ -155,7 +158,7 @@ mypy app
 ## Project Architecture
 
 ```text
-AfyaSync
+Care Beyond Connectivity
 │
 ├── app/
 │   ├── main.py
@@ -180,12 +183,12 @@ AfyaSync
 
 ## Safety and Data Privacy
 
-AfyaSync is an educational and portfolio project.
+Care Beyond Connectivity is an educational and portfolio project.
 
 Only synthetic data should be used for development and testing. Never use real patient information.
 
 ## Project Status
 
-AfyaSync demonstrates practical experience with Python backend development, Linux, Docker, CI/CD, container registries, and monitoring infrastructure.
+Care Beyond Connectivity demonstrates practical experience with Python backend development, Linux, Docker, CI/CD, container registries, and monitoring infrastructure.
 
 It is an ongoing learning and portfolio project.
