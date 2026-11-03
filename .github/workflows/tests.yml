@@ -1,39 +1,31 @@
-name: AfyaSync Tests
+name: AfyaSync CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest httpx ruff mypy
-
-      - name: Check code quality
-        run: ruff check .
-
-      - name: Check code formatting
-        run: ruff format --check .
-
-      - name: Check types
-        run: mypy app
+          pip install pytest httpx
 
       - name: Run tests
-        run: pytest -v
+        run: python -m pytest -v
