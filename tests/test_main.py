@@ -47,7 +47,7 @@ def client() -> Generator[TestClient]:
 def test_home(client: TestClient) -> None:
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json()["project"] == "AfyaSync"
+    assert response.json()["project"] == "Care Beyond Connectivity (CBC)"
     assert response.json()["status"] == "running"
 
 
@@ -62,7 +62,7 @@ def test_create_record(client: TestClient) -> None:
         "/records",
         json={
             "patient_reference": "TEST-AUTO-001",
-            "facility_name": "AfyaSync Demo Clinic",
+            "facility_name": "Care Beyond Connectivity Demo Clinic",
             "record_type": "Check-up",
             "notes": "Synthetic automated test record",
         },
@@ -86,7 +86,7 @@ def test_get_pending_records(client: TestClient) -> None:
         "/records",
         json={
             "patient_reference": "PENDING-001",
-            "facility_name": "AfyaSync Demo Clinic",
+            "facility_name": "Care Beyond Connectivity Demo Clinic",
             "record_type": "Check-up",
             "notes": "Waiting for synchronisation",
         },
@@ -105,7 +105,7 @@ def test_mark_record_as_synced(client: TestClient) -> None:
         "/records",
         json={
             "patient_reference": "SYNC-TEST-001",
-            "facility_name": "AfyaSync Demo Clinic",
+            "facility_name": "Care Beyond Connectivity Demo Clinic",
             "record_type": "Check-up",
             "notes": "Testing synchronization",
         },
@@ -126,7 +126,7 @@ def test_mark_already_synced_record_returns_conflict(
         "/records",
         json={
             "patient_reference": "SYNC-TEST-002",
-            "facility_name": "AfyaSync Demo Clinic",
+            "facility_name": "Care Beyond Connectivity Demo Clinic",
             "record_type": "Check-up",
             "notes": "Testing duplicate synchronization",
         },

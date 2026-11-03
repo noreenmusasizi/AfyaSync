@@ -5,7 +5,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "sqlite:///./afyasync.db",
+    "sqlite:///./cbc.db",
 )
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}

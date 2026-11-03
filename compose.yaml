@@ -1,13 +1,13 @@
 services:
-  afyasync:
+  cbc:
     build: .
-    container_name: afyasync-api
+    container_name: cbc-api
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: sqlite:////app/afyasync.db
+      DATABASE_URL: sqlite:////app/cbc.db
     volumes:
-      - ./afyasync.db:/app/afyasync.db
+      - ./cbc.db:/app/cbc.db
    
 
     restart: unless-stopped

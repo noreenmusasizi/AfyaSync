@@ -1,4 +1,4 @@
-name: AfyaSync CI
+name: Care Beyond Connectivity CI
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/noreenmusasizi/afyasync
+          images: ghcr.io/noreenmusasizi/cbc
           tags: |
             type=raw,value=latest
             type=sha

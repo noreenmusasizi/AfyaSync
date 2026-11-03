@@ -9,14 +9,14 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN groupadd -g 1000 afyasync && \
-    useradd -u 1000 -g afyasync -m afyasync
+RUN groupadd -g 1000 cbc && \
+    useradd -u 1000 -g cbc -m cbc
 
-COPY --chown=afyasync:afyasync app/ ./app/
+COPY --chown=cbc:cbc app/ ./app/
 
-RUN chown -R afyasync:afyasync /app
+RUN chown -R cbc:cbc /app
 
-USER afyasync
+USER cbc
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)" || exit 1

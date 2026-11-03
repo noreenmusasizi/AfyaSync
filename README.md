@@ -107,8 +107,8 @@ Grafana is intended to provide dashboards for visualizing monitoring data.
 Clone the repository:
 
 ```bash
-git clone https://github.com/noreenmusasizi/AfyaSync.git
-cd AfyaSync
+git clone https://github.com/noreenmusasizi/care-beyond-connectivity.git
+cd care-beyond-connectivity
 ```
 
 Start the application:
@@ -130,13 +130,13 @@ Check application health:
 The current Docker image is published to GitHub Container Registry:
 
 ```text
-ghcr.io/noreenmusasizi/afyasync:latest
+ghcr.io/noreenmusasizi/cbc:latest
 ```
 
 Pull the image:
 
 ```bash
-docker pull ghcr.io/noreenmusasizi/afyasync:latest
+docker pull ghcr.io/noreenmusasizi/cbc:latest
 ```
 
 ## Testing

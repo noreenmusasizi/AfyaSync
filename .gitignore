@@ -25,3 +25,7 @@ htmlcov/
 *.sqlite3
 backups/
 
+
+# Database and code backup files
+*.db.*
+*.backup

@@ -16,7 +16,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
 )
 
-logger = logging.getLogger("afyasync")
+logger = logging.getLogger("cbc")
 
 
 # Create database tables
@@ -71,9 +71,9 @@ class ClinicRecordResponse(BaseModel):
 @app.get("/")
 def home() -> dict[str, str]:
     return {
-        "project": "AfyaSync",
+        "project": "Care Beyond Connectivity (CBC)",
         "status": "running",
-        "message": "Welcome to the AfyaSync API",
+        "message": "Welcome to the Care Beyond Connectivity API",
     }
 
 
