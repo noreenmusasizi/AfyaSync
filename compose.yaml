@@ -4,6 +4,10 @@ services:
     container_name: afyasync-api
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:////app/afyasync.db
     volumes:
       - ./afyasync.db:/app/afyasync.db
+   
+
     restart: unless-stopped

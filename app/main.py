@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Generator
 from datetime import datetime
 
@@ -8,8 +9,20 @@ from sqlalchemy.orm import Session
 from app.database import Base, SessionLocal, engine
 from app.models import ClinicRecord
 
+# Configure application logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+)
+
+logger = logging.getLogger("afyasync")
+
+
+# Create database tables
 Base.metadata.create_all(bind=engine)
 
+
+# Initialize FastAPI
 app = FastAPI(
     title="AfyaSync API",
     description="An offline-first healthcare infrastructure prototype.",
@@ -17,6 +30,7 @@ app = FastAPI(
 )
 
 
+# Database dependency
 def get_db() -> Generator[Session]:
     db = SessionLocal()
     try:
@@ -25,6 +39,7 @@ def get_db() -> Generator[Session]:
         db.close()
 
 
+# Request model
 class ClinicRecordCreate(BaseModel):
     patient_reference: str
     facility_name: str
@@ -32,16 +47,20 @@ class ClinicRecordCreate(BaseModel):
     notes: str | None = None
 
 
-class ClinicRecordResponse(ClinicRecordCreate):
+# Response model
+class ClinicRecordResponse(BaseModel):
     id: int
+    patient_reference: str
+    facility_name: str
+    record_type: str
+    notes: str | None = None
     sync_status: str
     created_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
 
-
-
+# Home endpoint
 @app.get("/")
 def home() -> dict[str, str]:
     return {
@@ -51,6 +70,7 @@ def home() -> dict[str, str]:
     }
 
 
+# Health check endpoint
 @app.get("/health")
 def health_check() -> dict[str, str]:
     return {
@@ -58,11 +78,13 @@ def health_check() -> dict[str, str]:
     }
 
 
+# Create a clinical record
 @app.post("/records", response_model=ClinicRecordResponse, status_code=201)
 def create_record(
     record: ClinicRecordCreate,
     db: Session = Depends(get_db),
 ) -> ClinicRecord:
+
     existing = (
         db.query(ClinicRecord)
         .filter(ClinicRecord.patient_reference == record.patient_reference)
@@ -76,17 +98,26 @@ def create_record(
         )
 
     new_record = ClinicRecord(**record.model_dump())
+
     db.add(new_record)
     db.commit()
     db.refresh(new_record)
 
+    logger.info(
+        "Clinical record created successfully. Record ID: %s",
+        new_record.id,
+    )
+
     return new_record
 
 
+# Retrieve all clinical records
 @app.get("/records", response_model=list[ClinicRecordResponse])
 def get_records(db: Session = Depends(get_db)) -> list[ClinicRecord]:
     return db.query(ClinicRecord).order_by(ClinicRecord.id).all()
 
+
+# Retrieve pending records
 @app.get("/records/pending", response_model=list[ClinicRecordResponse])
 def get_pending_records(db: Session = Depends(get_db)) -> list[ClinicRecord]:
     return (
@@ -96,14 +127,19 @@ def get_pending_records(db: Session = Depends(get_db)) -> list[ClinicRecord]:
         .all()
     )
 
+
+# Mark a record as synchronised
 @app.patch("/records/{record_id}/sync", response_model=ClinicRecordResponse)
 def mark_record_as_synced(
     record_id: int,
     db: Session = Depends(get_db),
 ) -> ClinicRecord:
-    record = db.query(ClinicRecord).filter(
-        ClinicRecord.id == record_id
-    ).first()
+
+    record = (
+        db.query(ClinicRecord)
+        .filter(ClinicRecord.id == record_id)
+        .first()
+    )
 
     if record is None:
         raise HTTPException(
@@ -118,7 +154,13 @@ def mark_record_as_synced(
         )
 
     record.sync_status = "synced"
+
     db.commit()
     db.refresh(record)
+
+    logger.info(
+        "Clinical record synchronised successfully. Record ID: %s",
+        record.id,
+    )
 
     return record
