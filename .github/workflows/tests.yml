@@ -25,13 +25,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest httpx ruff
+          pip install pytest httpx ruff mypy
 
       - name: Check code quality
         run: ruff check .
 
       - name: Check formatting
         run: ruff format --check .
+
+      - name: Check types
+        run: mypy app
 
       - name: Run tests
         run: python -m pytest -v
