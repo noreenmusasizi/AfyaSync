@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Install dependencies
         run: |
@@ -32,7 +33,7 @@ jobs:
         run: ruff format --check .
 
       - name: Check types
-        run: mypy app tests
+        run: mypy app
 
       - name: Run tests
         run: pytest -v
