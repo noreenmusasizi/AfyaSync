@@ -38,9 +38,7 @@ def get_db() -> Iterator[Session]:
 # Update pending records metric
 def update_pending_records_metric(db: Session) -> None:
     pending_count = (
-        db.query(ClinicRecord)
-        .filter(ClinicRecord.sync_status == "pending")
-        .count()
+        db.query(ClinicRecord).filter(ClinicRecord.sync_status == "pending").count()
     )
     pending_records_gauge.set(pending_count)
 
