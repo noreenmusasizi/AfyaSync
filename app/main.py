@@ -1,8 +1,9 @@
 import logging
-from collections.abc import Generator
+from collections.abc import Iterator
 from datetime import datetime
 
 from fastapi import Depends, FastAPI, HTTPException
+from prometheus_client import Gauge
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.orm import Session
@@ -18,9 +19,38 @@ logging.basicConfig(
 
 logger = logging.getLogger("cbc")
 
+# Pending records Prometheus metric
+pending_records_gauge = Gauge(
+    "cbc_pending_records",
+    "Number of clinic records waiting to be synchronised.",
+)
+
+
+# Database dependency
+def get_db() -> Iterator[Session]:
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# Update pending records metric
+def update_pending_records_metric(db: Session) -> None:
+    pending_count = (
+        db.query(ClinicRecord)
+        .filter(ClinicRecord.sync_status == "pending")
+        .count()
+    )
+    pending_records_gauge.set(pending_count)
+
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
+
+# Initialise pending records metric
+with SessionLocal() as db:
+    update_pending_records_metric(db)
 
 
 # Initialize FastAPI
@@ -35,15 +65,6 @@ app = FastAPI(
 
 # Configure Prometheus metrics
 Instrumentator().instrument(app).expose(app)
-
-
-# Database dependency
-def get_db() -> Generator[Session]:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # Request model
@@ -110,6 +131,8 @@ def create_record(
     db.commit()
     db.refresh(new_record)
 
+    update_pending_records_metric(db)
+
     logger.info(
         "Clinical record created successfully. Record ID: %s",
         new_record.id,
@@ -160,6 +183,8 @@ def mark_record_as_synced(
 
     db.commit()
     db.refresh(record)
+
+    update_pending_records_metric(db)
 
     logger.info(
         "Clinical record synchronised successfully. Record ID: %s",
